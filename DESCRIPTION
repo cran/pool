@@ -1,7 +1,7 @@
 Package: pool
 Type: Package
 Title: Object Pooling
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person("Barbara", "Borges", email = "barbara@rstudio.com",
       role = c("aut", "cre")),
@@ -13,7 +13,7 @@ Description: Enables the creation of object pools, which make it less
 License: GPL-3
 Depends: R (>= 3.0.0), methods
 Imports: DBI, R6, dplyr, dbplyr, later
-Suggests: testthat, tibble, RSQLite
+Suggests: testthat, tibble, RSQLite, RMySQL
 URL: https://github.com/rstudio/pool
 BugReports: https://github.com/rstudio/pool/issues
 LazyData: TRUE
@@ -24,9 +24,9 @@ Collate: 'utils.R' 'scheduler.R' 'pool.R' 'pool-methods.R' 'object.R'
         'DBI-object.R' 'DBI-pool.R' 'dbplyr.R'
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-09-22 23:25:33 UTC; barbaraborges
+Packaged: 2017-11-02 23:52:56 UTC; barbaraborges
 Author: Barbara Borges [aut, cre],
   RStudio [cph]
 Maintainer: Barbara Borges <barbara@rstudio.com>
 Repository: CRAN
-Date/Publication: 2017-09-23 13:57:29 UTC
+Date/Publication: 2017-11-03 04:05:46 UTC
