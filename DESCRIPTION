@@ -1,10 +1,12 @@
 Package: pool
 Type: Package
 Title: Object Pooling
-Version: 0.1.4
+Version: 0.1.4.1
 Authors@R: c(
-    person("Barbara", "Borges", email = "barbara@rstudio.com",
+    person("Joe", "Cheng", email = "joe@rstudio.com",
       role = c("aut", "cre")),
+    person("Barbara", "Borges", email = "barb.b.ribeiro@gmail.com",
+      role = c("aut")),
     person(family = "RStudio", role = "cph")
     )
 Description: Enables the creation of object pools, which make it less
@@ -24,9 +26,10 @@ Collate: 'utils.R' 'scheduler.R' 'pool.R' 'pool-methods.R' 'object.R'
         'DBI-object.R' 'DBI-pool.R' 'dbplyr.R'
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-03-09 22:13:12 UTC; barbaraborges
-Author: Barbara Borges [aut, cre],
+Packaged: 2018-06-28 21:56:16 UTC; jcheng
+Author: Joe Cheng [aut, cre],
+  Barbara Borges [aut],
   RStudio [cph]
-Maintainer: Barbara Borges <barbara@rstudio.com>
+Maintainer: Joe Cheng <joe@rstudio.com>
 Repository: CRAN
-Date/Publication: 2018-03-10 15:59:22 UTC
+Date/Publication: 2018-06-29 21:22:59 UTC

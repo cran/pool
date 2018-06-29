@@ -1,6 +1,6 @@
-33149e7c096c1fa6f730248764f35c7c *DESCRIPTION
+d6eff606220464da450b2ac8aec15452 *DESCRIPTION
 4b46a1b2ccf002dbb881e49d9df75fc8 *NAMESPACE
-677a04df11989c49b1b0006d5013b444 *NEWS.md
+b71da4ff9c382ef9fb91acbf29a4f306 *NEWS.md
 8c1ade9c69eb16bfeae9cfdcce00afd0 *R/DBI-connection-interpolate.R
 643bf65da01ef4d7c75ae3144cacfb80 *R/DBI-connection-quote.R
 030ecde07edf7ba702e7b1a1e944ba14 *R/DBI-connection-sql.R
