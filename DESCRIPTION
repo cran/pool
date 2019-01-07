@@ -1,7 +1,7 @@
 Package: pool
 Type: Package
 Title: Object Pooling
-Version: 0.1.4.1
+Version: 0.1.4.2
 Authors@R: c(
     person("Joe", "Cheng", email = "joe@rstudio.com",
       role = c("aut", "cre")),
@@ -26,10 +26,10 @@ Collate: 'utils.R' 'scheduler.R' 'pool.R' 'pool-methods.R' 'object.R'
         'DBI-object.R' 'DBI-pool.R' 'dbplyr.R'
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-06-28 21:56:16 UTC; jcheng
+Packaged: 2019-01-04 18:30:23 UTC; jcheng
 Author: Joe Cheng [aut, cre],
   Barbara Borges [aut],
   RStudio [cph]
 Maintainer: Joe Cheng <joe@rstudio.com>
 Repository: CRAN
-Date/Publication: 2018-06-29 21:22:59 UTC
+Date/Publication: 2019-01-07 20:20:02 UTC

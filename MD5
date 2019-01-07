@@ -1,6 +1,6 @@
-d6eff606220464da450b2ac8aec15452 *DESCRIPTION
+2284a65acd15f21196309518a33486c4 *DESCRIPTION
 4b46a1b2ccf002dbb881e49d9df75fc8 *NAMESPACE
-b71da4ff9c382ef9fb91acbf29a4f306 *NEWS.md
+0f24110afdb88544e227af606d3e9024 *NEWS.md
 8c1ade9c69eb16bfeae9cfdcce00afd0 *R/DBI-connection-interpolate.R
 643bf65da01ef4d7c75ae3144cacfb80 *R/DBI-connection-quote.R
 030ecde07edf7ba702e7b1a1e944ba14 *R/DBI-connection-sql.R
@@ -36,7 +36,7 @@ e110a6329afe25b625a46b7dfb681c51 *man/object.Rd
 9399bf54cec061d6863a06d929a612dd *man/show-Pool-method.Rd
 71759008292a15e34a73c2deabe6ce07 *tests/testthat.R
 5b8ac42f324f75cea4cf8707c131d48c *tests/testthat/test-create-destroy.R
-3f58fba419f2d76b4a52ae19d8ca8fb9 *tests/testthat/test-dplyr.R
+a46e32f2baff4b95090a20635f093b9f *tests/testthat/test-dplyr.R
 248b11fdb7069c6ef29bf28c2a0b09e7 *tests/testthat/test-fetch.R
 7f12a6e09c156a1939db835c77cfca44 *tests/testthat/test-pool.R
 cab95ad72d6c9b8eca1eb3623bd87df8 *tests/testthat/test-release.R
