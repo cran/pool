@@ -1,6 +1,6 @@
-2284a65acd15f21196309518a33486c4 *DESCRIPTION
+c4b215003c4f13225e8c2686b1cd91b1 *DESCRIPTION
 4b46a1b2ccf002dbb881e49d9df75fc8 *NAMESPACE
-0f24110afdb88544e227af606d3e9024 *NEWS.md
+c22caa7d13e74f402bd5befddc1f4ebb *NEWS.md
 8c1ade9c69eb16bfeae9cfdcce00afd0 *R/DBI-connection-interpolate.R
 643bf65da01ef4d7c75ae3144cacfb80 *R/DBI-connection-quote.R
 030ecde07edf7ba702e7b1a1e944ba14 *R/DBI-connection-sql.R
@@ -15,7 +15,7 @@ bd628bc2fcfb7bced8dc7fa5dcfe90c4 *R/DBI-object-deprecated.R
 5fc300ac03aaad66d18574dab19f498f *R/object.R
 0f21973876eeb4c32f9b1ff33898f1a0 *R/pool-methods.R
 d8a814cfd573e343042a795eb2150756 *R/pool.R
-dcd8621ce2570430c4ff2ff8f7d2f1ee *R/scheduler.R
+7b11dbf00dadbff2cc50c47f81ae5597 *R/scheduler.R
 a02bca6792a3120b7c7e877730ba9400 *R/utils.R
 1eb486cb18b33fc1d1baf7e26cbd5bcd *README.md
 2ec79e3a1def54507b8393dc63c1461c *man/DBI-connection-interpolate.Rd
@@ -35,7 +35,7 @@ e110a6329afe25b625a46b7dfb681c51 *man/object.Rd
 03a20819cb6d530b17cb6088fcf7362f *man/poolWithTransaction.Rd
 9399bf54cec061d6863a06d929a612dd *man/show-Pool-method.Rd
 71759008292a15e34a73c2deabe6ce07 *tests/testthat.R
-5b8ac42f324f75cea4cf8707c131d48c *tests/testthat/test-create-destroy.R
+b0e3cde8d9afeb1d055fd311183716ed *tests/testthat/test-create-destroy.R
 a46e32f2baff4b95090a20635f093b9f *tests/testthat/test-dplyr.R
 248b11fdb7069c6ef29bf28c2a0b09e7 *tests/testthat/test-fetch.R
 7f12a6e09c156a1939db835c77cfca44 *tests/testthat/test-pool.R
