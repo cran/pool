@@ -6,7 +6,8 @@ describe("pool package", {
 
   if (requireNamespace("RSQLite", quietly = TRUE)) {
 
-    pool <- dbPool(RSQLite::SQLite(), dbname = ":memory:")
+    db <- tempfile()
+    pool <- dbPool(RSQLite::SQLite(), dbname = db)
 
     it("can create local SQLite pool", {
       expect_equal(class(pool), c("Pool", "R6"))
@@ -25,8 +26,9 @@ describe("pool package", {
     })
 
     it("can use dplyr syntax to copy table to DB", {
+
       checkCounts(pool, free = 1, taken = 0)
-      copy_to(pool, flights, "flights",
+      dplyr::copy_to(pool, flights, "flights",
         temporary = FALSE,
         indexes = list(
           c("year", "month", "day"),
@@ -36,19 +38,20 @@ describe("pool package", {
         )
       )
       checkCounts(pool, free = 1, taken = 0)
-      expect_true(db_has_table(pool, "flights"))
+      expect_true(dbExistsTable(pool, "flights"))
     })
 
     it("can use dplyr syntax to get a table from DB", {
       checkCounts(pool, free = 1, taken = 0)
-      flights_db <- tbl(pool, "flights")
+      flights_db <- dplyr::tbl(pool, "flights")
+      expect_s3_class(flights_db$src$con, "Pool")
       checkCounts(pool, free = 1, taken = 0)
-      expect_s3_class(flights_db, "tbl_dbi")
+      expect_s3_class(flights_db, "tbl_Pool")
     })
 
     it("can use dplyr syntax to select", {
       checkCounts(pool, free = 1, taken = 0)
-      flights_db <- tbl(pool, "flights")
+      flights_db <- dplyr::tbl(pool, "flights")
       s <- dplyr::select(flights_db, year:day, dep_delay, arr_delay)
       expect_equal(tibble::as_tibble(s),
         tibble::tibble(
@@ -64,7 +67,7 @@ describe("pool package", {
 
     it("can use dplyr syntax to filter", {
       checkCounts(pool, free = 1, taken = 0)
-      flights_db <- tbl(pool, "flights")
+      flights_db <- dplyr::tbl(pool, "flights")
       f <- dplyr::filter(flights_db, dep_delay > 0)
       ft <- tibble::as_tibble(f)
       expect_equal(ft$dep_time, c(517, 533, 542))
@@ -74,7 +77,7 @@ describe("pool package", {
 
     it("can use dplyr syntax to `collect`", {
       checkCounts(pool, free = 1, taken = 0)
-      flights_db <- tbl(pool, "flights")
+      flights_db <- dplyr::tbl(pool, "flights")
       c <- dplyr::collect(flights_db)
       expect_equal(c, flights)
       expect_equal(nrow(c), 10)
@@ -82,7 +85,7 @@ describe("pool package", {
     })
 
     it("throws error when `temporary = TRUE`", {
-      expect_error(copy_to(pool, flights, "temp"),
+      expect_error(dplyr::copy_to(pool, flights, "temp"),
         "You cannot use `temporary = TRUE`"
       )
     })

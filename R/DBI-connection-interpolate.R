@@ -6,24 +6,20 @@ NULL
 #' Pool object wrappers around DBIConnection methods that deal
 #' with the safe interpolation of values into an SQL string and
 #' the reverse -- parsing interpolated variables from SQL. See
-#' \code{\link[DBI]{sqlInterpolate}} and
-#' \code{\link[DBI]{sqlParseVariables}} for the original
+#' [DBI::sqlInterpolate()] and
+#' [DBI::sqlParseVariables()] for the original
 #' documentation.
 #'
 #' @name DBI-connection-interpolate
 NULL
 
-#' @param conn,sql,...,.dots See \code{\link[DBI]{sqlInterpolate}}.
+#' @param conn,sql,...,.dots See [DBI::sqlInterpolate()].
 #' @export
 #' @rdname DBI-connection-interpolate
 setMethod("sqlInterpolate", "Pool", function(conn, sql, ..., .dots = list()) {
   connection <- poolCheckout(conn)
   on.exit(poolReturn(connection))
-  if (identical(list(), .dots)) {
-    DBI::sqlInterpolate(connection, sql, ...)
-  } else {
-    DBI::sqlInterpolate(connection, sql, .dots = .dots)
-  }
+  DBI::sqlInterpolate(connection, sql, ..., .dots = .dots)
 })
 
 #' @export

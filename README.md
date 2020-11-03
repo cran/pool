@@ -2,9 +2,11 @@ pool
 ======
 ##### *Database Connection Pooling in R*
 
-[![Travis-CI Build Status](https://travis-ci.org/rstudio/pool.svg?branch=master)](https://travis-ci.org/rstudio/pool)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rstudio/pool?branch=master&svg=true)](https://ci.appveyor.com/project/rstudio/pool)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/pool)](https://cran.r-project.org/package=pool)
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/pool)](https://CRAN.R-project.org/package=pool)
+[![R build status](https://github.com/rstudio/pool/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/pool/actions)
+[![Codecov test coverage](https://codecov.io/gh/rstudio/pool/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/pool?branch=master)
+<!-- badges: end -->
 
 The goal of the `pool` package is to abstract away the logic of connection management and the performance cost of fetching a new connection from a remote database. These concerns are especially prominent in interactive contexts, like Shiny apps (which connect to a remote database) or even at the R console. So, while this package is of most practical value to Shiny developers, there is no harm if it is used in other contexts. Since `pool` integrates with both `DBI` and `dplyr`, there are very few things that will be new to you, if you're already using either of those packages. Essentially, you shouldn't feel the difference, with the exception of creating and closing a Pool object (as opposed to connecting and disconnecting a DBIConnection object).
 
@@ -36,7 +38,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   output$tbl <- renderTable({
-    pool %>% tbl("City") %>% filter(ID == input$ID) %>% collect()
+    pool %>% tbl("City") %>% filter(ID == !!input$ID) %>% collect()
   })
   output$popPlot <- renderPlot({
     df <- pool %>% tbl("City") %>% head(input$nrows) %>% collect()
@@ -84,7 +86,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   output$tbl <- renderTable({
-    conn %>% tbl("City") %>% filter(ID == input$ID) %>% collect()
+    conn %>% tbl("City") %>% filter(ID == !!input$ID) %>% collect()
   })
   output$popPlot <- renderPlot({
     df <- conn %>% tbl("City") %>% head(input$nrows) %>% collect()
@@ -127,7 +129,7 @@ server <- function(input, output, session) {
     conn <- do.call(dbConnect, args)
     on.exit(dbDisconnect(conn))
 
-    conn %>% tbl("City") %>% filter(ID == input$ID) %>% collect()
+    conn %>% tbl("City") %>% filter(ID == !!input$ID) %>% collect()
   })
   output$popPlot <- renderPlot({
     conn <- do.call(dbConnect, args)
@@ -159,5 +161,5 @@ The `pool` package was created so you don't have to worry about this at all. Sin
 
 ## More resources
 
-- [db.rstudio.com](http://db.rstudio.com/) for a lot of best practices, articles and demos on databases in R and in RStudio.
-- [shiny.rstudio.com](http://shiny.rstudio.com/) to learn more about Shiny (there are also more articles, including on data and databases in [/articles](http://shiny.rstudio.com/articles/)).
+- [db.rstudio.com](https://db.rstudio.com/) for a lot of best practices, articles and demos on databases in R and in RStudio.
+- [shiny.rstudio.com](https://shiny.rstudio.com/) to learn more about Shiny (there are also more articles, including on data and databases in [/articles](https://shiny.rstudio.com/articles/)).
