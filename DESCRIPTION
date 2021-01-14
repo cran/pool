@@ -1,7 +1,7 @@
 Type: Package
 Package: pool
 Title: Object Pooling
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: 
     c(person(given = "Joe",
              family = "Cheng",
@@ -20,7 +20,7 @@ License: GPL-3
 URL: https://github.com/rstudio/pool
 BugReports: https://github.com/rstudio/pool/issues
 Depends: methods, R (>= 3.0.0)
-Imports: DBI, R6, later
+Imports: DBI, R6, later (>= 1.0.0)
 Suggests: testthat, tibble, dplyr, dbplyr, RSQLite, RMySQL
 Encoding: UTF-8
 LazyData: TRUE
@@ -31,10 +31,10 @@ Collate: 'utils.R' 'scheduler.R' 'pool.R' 'pool-methods.R' 'object.R'
         'DBI-connection.R' 'DBI-driver.R' 'DBI-object-deprecated.R'
         'DBI-object.R' 'DBI-pool.R' 'dbplyr.R' 'zzz-hooks.R'
 NeedsCompilation: no
-Packaged: 2020-11-02 23:10:28 UTC; jcheng
+Packaged: 2021-01-14 16:23:26 UTC; hadley
 Author: Joe Cheng [aut, cre],
   Barbara Borges [aut],
   RStudio [cph]
 Maintainer: Joe Cheng <joe@rstudio.com>
 Repository: CRAN
-Date/Publication: 2020-11-03 06:50:02 UTC
+Date/Publication: 2021-01-14 21:20:03 UTC

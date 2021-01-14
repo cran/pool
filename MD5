@@ -1,6 +1,6 @@
-26405c6a57b30cec5766480f4e258fd7 *DESCRIPTION
+d55b807a180b96c2b72162a212efd124 *DESCRIPTION
 4724176bf93482bc465383b5648e2faa *NAMESPACE
-014ad64e4098614a328ac5e3366b5204 *NEWS.md
+fafee5bc7b44d4a082337c8ce704d752 *NEWS.md
 3fef053246192912e8b5d2c6f8413efb *R/DBI-connection-interpolate.R
 6424374b0ae5b8efd3117cd6e72a32ed *R/DBI-connection-quote.R
 c4d820bd026d05108234cb526194904b *R/DBI-connection-sql.R
@@ -11,13 +11,13 @@ c4d820bd026d05108234cb526194904b *R/DBI-connection-sql.R
 318b68ecc12113b5ba46529490c17e55 *R/DBI-object.R
 7513c6eb8546dd3dbf254ab9428df2de *R/DBI-pool.R
 08d45a77466cf49dcd1aab07cd55af30 *R/DBI.R
-99b82668b8fcbf402c51f1a9c9a1e270 *R/dbplyr.R
+ca3d2bc247e5719c96d5bf0d78244031 *R/dbplyr.R
 8f68d7e6631cd811d8639841916ecd67 *R/object.R
 7ff83a0446592e846840f4420a4e649e *R/pool-methods.R
 d8a814cfd573e343042a795eb2150756 *R/pool.R
-7b11dbf00dadbff2cc50c47f81ae5597 *R/scheduler.R
+bf7f8311922fc486c30d3713689edc4b *R/scheduler.R
 60a3f241a29bdba0107a8972f39726e0 *R/utils.R
-3a8cd1d7099b370cc4f76b8b06710cca *R/zzz-hooks.R
+2a6ddf8ceb78b294c3a58986902910da *R/zzz-hooks.R
 86b4de2c7a9bc1509c68a86469b8aa70 *README.md
 9f936ab08c7e84f0f8c232bfd30ae9e4 *man/DBI-connection-interpolate.Rd
 bdabc14222781d752f1a6d25e401eacd *man/DBI-connection-quote.Rd
@@ -28,7 +28,7 @@ bdabc14222781d752f1a6d25e401eacd *man/DBI-connection-quote.Rd
 1b2ea125c8aa61fa3711bbc7677ded01 *man/DBI-object.Rd
 d65802a54fce7ee09d3448633b33e6a9 *man/Pool-class.Rd
 4dfd3436539ae33148f0f84eeafd0500 *man/dbPool.Rd
-6c73af8da74bf6fb386cf4474892f8b0 *man/dplyr-db-methods.Rd
+4c99c7c0667419afde61893f5e8e3fd7 *man/dplyr-db-methods.Rd
 757bd0c7e7bd0e174bac2980353a615b *man/object.Rd
 b9ccabd6f1bd8c8cb5aa05a9468a56b8 *man/pool-package.Rd
 48425326ff32300df266982ca2fb9ca0 *man/poolCheckout.Rd
@@ -38,7 +38,7 @@ b9ccabd6f1bd8c8cb5aa05a9468a56b8 *man/pool-package.Rd
 71759008292a15e34a73c2deabe6ce07 *tests/testthat.R
 38398baf8f5d0ab18e1f06d0a1e58f3f *tests/testthat/test-DBI-connection.R
 b0e3cde8d9afeb1d055fd311183716ed *tests/testthat/test-create-destroy.R
-f91a15894cc9e12d37ef273a42a25ea8 *tests/testthat/test-dbplyr.R
+2cc2cd3301a0e6ac7ce2dfd4c26313c8 *tests/testthat/test-dbplyr.R
 248b11fdb7069c6ef29bf28c2a0b09e7 *tests/testthat/test-fetch.R
 7f12a6e09c156a1939db835c77cfca44 *tests/testthat/test-pool.R
 cab95ad72d6c9b8eca1eb3623bd87df8 *tests/testthat/test-release.R
