@@ -1,7 +1,42 @@
-# pool 0.1.6
+# pool 1.0.0
 
-pool 0.1.5.9000
-================
+## New features
+
+* Pool has been re-licensed to MIT (#158).
+
+* `dbPool()` gains an `onCreate` parameter that allows you do something to
+  every connection that pool creates. This is useful for setting options that
+  you want to apply to every connection (#98).
+
+* New `localCheckout()` checkouts and then automatically returns an object.
+  It only works in function scope.
+
+## Minor improvements and bug fixes
+
+* Pools now get a useful print method (#140).
+
+* pool now implements the dbplyr 2.0.0 interface, eliminating warnings when
+  using pool with dplyr (#132).
+
+* Pool errors and warnings have been reviewed with an eye to making them 
+  more immediately actionable (#145).
+
+* Objects are now validated once on first checkout to ensure that the
+  object and validation strategy are both ok.
+
+* Added support for SAP HANA databases (@marcosci, #103).
+
+* `dbPool()` and `poolCreate()` now default to validating every 60s, rather
+   than every 600s. This makes pools a little more robust to shorter connection
+   timeouts (#149).
+
+* `dbPool()`'s `validateQuery` is now actually used (#153).
+
+* DBI methods should dispatch correctly in more cases; in particular 
+  `dbReadTable()` and friends will now work correctly when used with
+  `DBI::Id()` (#120).
+
+# pool 0.1.6
 
 * `left_join()` and friends once again work with pool objects (#111).
 
@@ -35,7 +70,7 @@ pool 0.1.4.1
 pool 0.1.4
 ================
 
-* Changed the methods `dbExistsTable()`, `dbRemoveTable()`, `dbWriteTable()`, `dbGetQuery()`, `dbExecute()`, `dbListFields()` and `dbReadTable()` to dispatch over the first two arguments, as per the [default definition in DBI](https://github.com/r-dbi/DBI/blob/master/R/DBConnection.R). (#57)
+* Changed the methods `dbExistsTable()`, `dbRemoveTable()`, `dbWriteTable()`, `dbGetQuery()`, `dbExecute()`, `dbListFields()` and `dbReadTable()` to dispatch over the first two arguments, as per the default definition in DBI. (#57)
 
 pool 0.1.3
 ================

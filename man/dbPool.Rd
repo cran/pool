@@ -2,47 +2,63 @@
 % Please edit documentation in R/DBI.R
 \name{dbPool}
 \alias{dbPool}
-\title{Create a DBI Database Connection Pool.}
+\title{Create a pool of database connections}
 \usage{
-dbPool(drv, ..., validateQuery = NULL)
+dbPool(
+  drv,
+  ...,
+  minSize = 1,
+  maxSize = Inf,
+  onCreate = NULL,
+  idleTimeout = 60,
+  validationInterval = 60,
+  validateQuery = NULL
+)
 }
 \arguments{
-\item{drv}{An object that inherits from \code{\link[DBI:DBIDriver-class]{DBI::DBIDriver-class()}},
-or an existing \code{\link[DBI:DBIConnection-class]{DBI::DBIConnection-class()}} object (in order to
-clone an existing connection).}
+\item{drv}{A \link[DBI:DBIDriver-class]{DBI Driver}, e.g. \code{RSQLite::SQLite()},
+\code{RPostgres::Postgres()}, \code{odbc::odbc()} etc.}
 
-\item{...}{Arguments needed for both \code{\link[DBI:dbConnect]{DBI::dbConnect()}}
-(mandatory if required by the \code{DBIDriver} you're using) and
-\code{\link[=poolCreate]{poolCreate()}} (optional) - all arguments should be named:
-\enumerate{
-\item The required authorization arguments needed by the DBMS
-instance; these typically include \code{user}, \code{password},
-\code{dbname}, \code{host}, \code{port}, etc. For details check
-the appropriate \code{DBIDriver}'s documentation.
-\item Optionally, override the \code{poolCreate} defaults:
-\code{minSize} (minimum number of connections that the pool should
-have at all times), \code{maxSize} (maximum number of connections
-that the pool may have at any time), \code{idleTimeout} (number
-of seconds to wait before closing a connection, if the number
-of connection is above \code{minSize}), and \code{validationInterval}
-(number of seconds to wait before validating the connection again).
-}}
+\item{...}{Arguments passed on to \code{\link[DBI:dbConnect]{DBI::dbConnect()}}. These are used to
+identify the database and provide needed authentication.}
 
-\item{validateQuery}{The query to run to verify that the connection
-is valid (it should be as simple as possible). If this is not
-provided, \code{dbPool} will try a few possibilities, but these are
-not exhaustive.}
+\item{minSize, maxSize}{The minimum and maximum number of objects in the pool.}
+
+\item{onCreate}{A function that takes a single argument, a connection,
+and is called when the connection is created. Use this with
+\code{\link[DBI:dbExecute]{DBI::dbExecute()}} to set default options on every connection created
+by the pool.}
+
+\item{idleTimeout}{Number of seconds to wait before destroying idle objects
+(i.e. objects available for checkout over and above \code{minSize}).}
+
+\item{validationInterval}{Number of seconds to wait between validating
+objects that are available for checkout. These objects are validated
+in the background to keep them alive.
+
+To force objects to be validated on every checkout, set
+\code{validationInterval = 0}.}
+
+\item{validateQuery}{A simple query that can be used to verify that the
+connetction is valid. If not provided, \code{dbPool()} will try a few common
+options, but these don't work for all databases.}
 }
 \description{
-A wrapper around \code{poolCreate} to simplify the creation of a DBI
-database connection pool. Check the documentation of \code{\link[=poolCreate]{poolCreate()}}
-for a generic overview of the parent function and the Pool object. The
-main thing to point out is that, for \code{dbPool}, you always need to
-provide a DBI driver (i.e. of class \code{\link[DBI:DBIDriver-class]{DBI::DBIDriver-class()}}),
-and it should always be accompanied by the required authorization
-arguments (see the example below).
+\code{dbPool()} is a drop-in replacement for \code{\link[DBI:dbConnect]{DBI::dbConnect()}} that
+provides a shared pool of connections that can automatically reconnect
+to the database if needed.
 }
 \examples{
+# You use a dbPool in the same way as a standard DBI connection
+pool <- dbPool(RSQLite::SQLite())
+pool
+
+DBI::dbWriteTable(pool, "mtcars", mtcars)
+dbGetQuery(pool, "SELECT * FROM mtcars LIMIT 4")
+
+# Always close a pool when you're done using it
+poolClose(pool)
+
 # Using the RMySQL package
 if (requireNamespace("RMySQL", quietly = TRUE)) {
   pool <- dbPool(
@@ -54,21 +70,7 @@ if (requireNamespace("RMySQL", quietly = TRUE)) {
   )
 
   dbGetQuery(pool, "SELECT * from City LIMIT 5;")
-  #>   ID           Name CountryCode      District Population
-  #> 1  1          Kabul         AFG         Kabol    1780000
-  #> 2  2       Qandahar         AFG      Qandahar     237500
-  #> 3  3          Herat         AFG         Herat     186800
-  #> 4  4 Mazar-e-Sharif         AFG         Balkh     127800
-  #> 5  5      Amsterdam         NLD Noord-Holland     731200
 
   poolClose(pool)
-
-} else {
-  message("Please install the 'RMySQL' package to run this example")
-}
-
-# Using a DSN with an ODBC driver
-\dontrun{
-pool <- dbPool(odbc::odbc(), dsn = "Data Source Name")
 }
 }

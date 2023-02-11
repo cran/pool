@@ -3,18 +3,54 @@
 \name{poolCheckout}
 \alias{poolCheckout}
 \alias{poolCheckout,Pool-method}
-\title{Checks out an object from the pool.}
+\alias{poolReturn}
+\alias{poolReturn,ANY-method}
+\alias{localCheckout}
+\title{Check out and return object from the pool}
 \usage{
 poolCheckout(pool)
 
 \S4method{poolCheckout}{Pool}(pool)
+
+poolReturn(object)
+
+\S4method{poolReturn}{ANY}(object)
+
+localCheckout(pool, env = parent.frame())
 }
 \arguments{
 \item{pool}{The pool to get the object from.}
+
+\item{object}{Object to return}
+
+\item{env}{Environment corresponding to the execution frame. For expert
+use only.}
 }
 \description{
-Should be called by the end user if they need a persistent
-object, that is not returned to the pool automatically.
-When you don't longer need the object, be sure to return it
-to the pool using \code{poolReturn(object)}.
+Use \code{poolCheckout()} to check out an object from the pool and
+\code{poolReturn()} to return it. You will receive a warning if all objects
+aren't returned before the pool is closed.
+
+\code{localCheckout()} is a convenience function that can be used inside
+functions (and other function-scoped operations like \code{shiny::reactive()}
+and \code{local()}). It checks out an object and automatically returns it when
+the function exits
+
+Note that validation is only performed when the object is checked out,
+so you generally want to keep the checked out around for as little time as
+possible.
+}
+\examples{
+pool <- dbPool(RSQLite::SQLite())
+con <- poolCheckout(pool)
+con
+poolReturn(con)
+
+f <- function() {
+  con <- localCheckout(pool)
+  # do something ...
+}
+f()
+
+poolClose(pool)
 }

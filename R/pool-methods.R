@@ -1,14 +1,13 @@
-#' @include pool.R
-NULL
-
-#' S4 class for compatibility with DBI methods
+#' Create a pool of reusable objects
 #'
+#' @description
 #' A generic pool class that holds objects. These can be fetched
-# from the pool and released back to it at will, with very
-# little computational cost. The pool should be created only once
-# and closed when it is no longer needed, to prevent leaks. See
-# [dbPool() for an example of object pooling applied to DBI database
-# connections.
+#' from the pool and released back to it at will, with very
+#' little computational cost. The pool should be created only once
+#' and closed when it is no longer needed, to prevent leaks.
+#'
+#' See [dbPool()] for an example of object pooling applied to DBI database
+#' connections.
 #'
 #' @export
 #' @aliases Pool
@@ -16,74 +15,35 @@ setClass("Pool")
 
 #' @export
 #' @rdname Pool-class
-#' @param factory A factory function responsible for the generation of
-#'   the objects that the pool will hold (ex: for DBI database connections,
-#'   this function is `dbConnect`). It must take no arguments.
-#' @param minSize An optional number specifying the minimum
-#'   number of objects that the pool should have at all times.
-#' @param maxSize An optional number specifying the maximum
-#'   number of objects that the pool may have at any time.
-#' @param idleTimeout The number of seconds that an idle
-#'   object will be kept in the pool before it is destroyed (only
-#'   applies if the number of objects is over the `minSize`).
-#'   Use `Inf` if you want created objects never to be destroyed
-#'   (there isn't a great reason for this usually).
-#' @param validationInterval The minimum number of seconds that
-#'  `pool` will wait before running a validation check on the
-#'  next checked out object. By not necessarily validating every
-#'  checked out object, there can be substantial performance gains
-#'  (especially if the interval between checking out new objects is
-#'  very small).
-#' @param  state A `pool` public variable to be used by
-#'  backend authors as necessary.
-poolCreate <- function(factory, minSize = 1, maxSize = Inf,
-                       idleTimeout = 60, validationInterval = 600,
+#' @param factory A zero-argument function called to create the objects that
+#'   the pool will hold (e.g. for DBI database connections, [dbPool()] uses
+#'   a wrapper around `DBI::dbConnect()`).
+#' @param minSize,maxSize The minimum and maximum number of objects in the pool.
+#' @param idleTimeout Number of seconds to wait before destroying idle objects
+#'   (i.e. objects available for checkout over and above `minSize`).
+#' @param validationInterval Number of seconds to wait between validating
+#'   objects that are available for checkout. These objects are validated
+#'   in the background to keep them alive.
+#'
+#'   To force objects to be validated on every checkout, set
+#'   `validationInterval = 0`.
+#' @param  state A `pool` public variable to be used by backend authors.
+poolCreate <- function(factory,
+                       minSize = 1,
+                       maxSize = Inf,
+                       idleTimeout = 60,
+                       validationInterval = 60,
                        state = NULL) {
-  Pool$new(factory, minSize, maxSize,
-    idleTimeout, validationInterval, state)
+  Pool$new(
+    factory,
+    minSize,
+    maxSize,
+    idleTimeout,
+    validationInterval,
+    state,
+    error_call = current_env()
+  )
 }
-
-#' Checks out an object from the pool.
-#'
-#' Should be called by the end user if they need a persistent
-#' object, that is not returned to the pool automatically.
-#' When you don't longer need the object, be sure to return it
-#' to the pool using `poolReturn(object)`.
-#'
-#' @param pool The pool to get the object from.
-#' @export
-setGeneric("poolCheckout", function(pool) {
-  standardGeneric("poolCheckout")
-})
-
-#' @rdname poolCheckout
-#' @export
-setMethod("poolCheckout", "Pool", function(pool) {
-  pool$fetch()
-})
-
-#' Returns an object back to the pool.
-#'
-#' Should be called by the end user if they previously fetched
-#' an object directly using `object <- poolCheckout(pool)`
-#' and are now done with said object.
-#'
-#' @param object A pooled object.
-#' @export
-setGeneric("poolReturn", function(object) {
-  standardGeneric("poolReturn")
-})
-
-#' @export
-#' @rdname poolReturn
-setMethod("poolReturn", "ANY", function(object) {
-  pool_metadata <- attr(object, "pool_metadata", exact = TRUE)
-  if (is.null(pool_metadata) || !pool_metadata$valid) {
-    stop("Invalid object.")
-  }
-  pool <- pool_metadata$pool
-  pool$release(object)
-})
 
 #' @export
 #' @rdname Pool-class
@@ -98,12 +58,67 @@ setMethod("poolClose", "Pool", function(pool) {
   pool$close()
 })
 
-#' Show method
-#' @param object A Pool object.
+#' Check out and return object from the pool
+#'
+#' @description
+#' Use `poolCheckout()` to check out an object from the pool and
+#' `poolReturn()` to return it. You will receive a warning if all objects
+#' aren't returned before the pool is closed.
+#'
+#' `localCheckout()` is a convenience function that can be used inside
+#' functions (and other function-scoped operations like `shiny::reactive()`
+#' and `local()`). It checks out an object and automatically returns it when
+#' the function exits
+#'
+#' Note that validation is only performed when the object is checked out,
+#' so you generally want to keep the checked out around for as little time as
+#' possible.
+#'
+#' @param pool The pool to get the object from.
 #' @export
-setMethod("show", "Pool", function(object) {
-  pooledObj <- poolCheckout(object)
-  on.exit(poolReturn(pooledObj))
-  cat("<Pool>\n", "  pooled object class: ",
-      is(pooledObj)[1], sep = "")
+#' @examples
+#' pool <- dbPool(RSQLite::SQLite())
+#' con <- poolCheckout(pool)
+#' con
+#' poolReturn(con)
+#'
+#' f <- function() {
+#'   con <- localCheckout(pool)
+#'   # do something ...
+#' }
+#' f()
+#'
+#' poolClose(pool)
+setGeneric("poolCheckout", function(pool) {
+  standardGeneric("poolCheckout")
 })
+
+#' @rdname poolCheckout
+#' @export
+setMethod("poolCheckout", "Pool", function(pool) {
+  pool$fetch()
+})
+
+#' @rdname poolCheckout
+#' @param object Object to return
+#' @export
+setGeneric("poolReturn", function(object) {
+  standardGeneric("poolReturn")
+})
+
+#' @export
+#' @rdname poolCheckout
+setMethod("poolReturn", "ANY", function(object) {
+  pool <- pool_metadata(object)$pool
+  pool$release(object)
+})
+
+#' @export
+#' @rdname poolCheckout
+#' @param env Environment corresponding to the execution frame. For expert
+#'   use only.
+localCheckout <- function(pool, env = parent.frame()) {
+  obj <- poolCheckout(pool)
+  withr::defer(poolReturn(obj), envir = env)
+  obj
+}
