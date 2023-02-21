@@ -8,6 +8,7 @@ test_that("can copy and collect", {
     temporary = FALSE,
     indexes = list(c("x", "y"), "y")
   )
+  expect_s3_class(dbplyr::remote_con(db), "Pool")
   expect_equal(dplyr::collect(db), df)
 
   # But copy_to must not be temporary
@@ -49,6 +50,12 @@ test_that("joins, semi_joins, and set ops work", {
   expect_no_error(dplyr::collect(dplyr::union(db1, db2)))
 })
 
+test_that("can explain", {
+  pool <- local_db_pool()
+
+  db <- dplyr::copy_to(pool, data.frame(x = 1), temporary = FALSE)
+  expect_output(dplyr::explain(db))
+})
 test_that("can use schemas with pool", {
   pool <- local_db_pool()
 

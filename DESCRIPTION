@@ -1,7 +1,7 @@
 Type: Package
 Package: pool
 Title: Object Pooling
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Joe", "Cheng", , "joe@posit.co", role = "aut"),
     person("Barbara", "Borges", role = "aut"),
@@ -24,11 +24,11 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-02-10 23:06:02 UTC; hadleywickham
+Packaged: 2023-02-21 14:31:59 UTC; hadleywickham
 Author: Joe Cheng [aut],
   Barbara Borges [aut],
   Hadley Wickham [aut, cre],
   Posit Software, PBC [cph, fnd]
 Maintainer: Hadley Wickham <hadley@posit.co>
 Repository: CRAN
-Date/Publication: 2023-02-11 08:50:02 UTC
+Date/Publication: 2023-02-21 15:20:02 UTC

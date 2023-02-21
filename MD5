@@ -1,13 +1,13 @@
-12fdf69382bcfa8b7e39507f0fe3dfba *DESCRIPTION
+018d8b36a967923c19b5b3b788bc07d7 *DESCRIPTION
 7413a57e181fa27dc3aed60b9e13f0f6 *LICENSE
 b33b4e17e0fbe0b29bad846d47064361 *NAMESPACE
-0c9cdb41f857838b36a36afa696342cc *NEWS.md
+d23fddf5b52f8884002254ddf5e375b5 *NEWS.md
 28a6be324c564079f9a4d450134cff9d *R/DBI-custom.R
 217e1f852c749ae050373278e50389eb *R/DBI-transactions.R
 6f0e05e2ab645cc9fe70121ad0cfbfca *R/DBI-wrap.R
 9f13be8de2b3f0cd87526936e2316ac4 *R/DBI.R
 4b00dc017ad9d9afa9e33ba6e68fab8b *R/compat-s3-register.R
-4726ac059b09a820a4801dff4d83c5dd *R/dbplyr.R
+c192ecdd0bcb9bf134b8a3b7d4ea4740 *R/dbplyr.R
 a04e676a9b8b67e3dc93f77c79abd392 *R/hooks.R
 74cf697c4e06fc97545eb41c465c5de6 *R/pool-methods.R
 9d569ba39150f400bd046f46985e075e *R/pool-package.R
@@ -15,7 +15,7 @@ a04e676a9b8b67e3dc93f77c79abd392 *R/hooks.R
 d4fc695567dd7fd6ff0a7ce743a4e965 *R/scheduler.R
 07c1395ef9148e7f33c72281cd9c3441 *R/utils.R
 7d72ca70d0a227cc6bb40114438838a4 *R/zzz.R
-dfb50ad337d1786c44d234298664e2d5 *README.md
+c571c57413ae0204efcdd65eb51ba750 *README.md
 699f6d6dc7272489dc525b1b5190af65 *build/vignette.rds
 3b03d316bd6f34db61577914ae2fed6f *inst/doc/why-pool.R
 60d4864a2b1427eb160da2f58a645a1d *inst/doc/why-pool.Rmd
@@ -40,7 +40,7 @@ fec93cfde6a6940fbff12bb385da1ee3 *tests/testthat/_snaps/dbplyr.md
 d4a0dd44aaf37e2000e11357caf503de *tests/testthat/test-DBI-custom.R
 d5394d75fbb63009445fffc812259d0c *tests/testthat/test-DBI-wrap.R
 61b8686062f0496256fab774b2cdb56d *tests/testthat/test-DBI.R
-b4462ef66433cb163585ba5a49a44c57 *tests/testthat/test-dbplyr.R
+f5015bb648593c385652cb471f3b23c6 *tests/testthat/test-dbplyr.R
 4b7149a520df390984e3de2ef52f7484 *tests/testthat/test-hooks.R
 8d42e7553d221e65529abc233e4ad360 *tests/testthat/test-pool-methods.R
 e133dd9273841e3d943f8c35bb11464e *tests/testthat/test-pool.R
