@@ -68,8 +68,7 @@ DBI_wrap <- function(fun_name) {
   recall <- call2(ns_fun, !!!call_args)
 
   body <- expr({
-    db_con <- poolCheckout(!!con_arg)
-    on.exit(poolReturn(db_con))
+    db_con <- localCheckout(!!con_arg)
 
     !!recall
   })
@@ -164,3 +163,27 @@ setMethod("dbQuoteLiteral", "Pool", DBI_wrap("dbQuoteLiteral"))
 #' @export
 #' @rdname DBI-wrap
 setMethod("dbQuoteString", "Pool", DBI_wrap("dbQuoteString"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbAppendTableArrow", "Pool", DBI_wrap("dbAppendTableArrow"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbCreateTableArrow", "Pool", DBI_wrap("dbCreateTableArrow"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbGetQueryArrow", "Pool", DBI_wrap("dbGetQueryArrow"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbReadTableArrow", "Pool", DBI_wrap("dbReadTableArrow"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbSendQueryArrow", "Pool", DBI_wrap("dbSendQueryArrow"))
+
+#' @export
+#' @rdname DBI-wrap
+setMethod("dbWriteTableArrow", "Pool", DBI_wrap("dbWriteTableArrow"))

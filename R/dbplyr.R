@@ -23,30 +23,32 @@
 #'
 #' poolClose(pool)
 tbl.Pool <- function(src, from, ..., vars = NULL) {
-  con <- poolCheckout(src)
-  on.exit(poolReturn(con))
-
-  from <- dbplyr::as.sql(from, con)
-  if (is.null(vars)) {
-    vars <- dplyr::db_query_fields(con, from)
-  }
-
   dbplyr::tbl_sql("Pool", dbplyr::src_dbi(src), from, ..., vars = vars)
 }
 
 #' @rdname tbl.Pool
+#' @param name Name for remote table. Defaults to the name of `df`, if it's
+#'   an identifier, otherwise uses a random name.
 #' @inheritParams dbplyr::copy_to.src_sql
 copy_to.Pool <- function(dest,
                          df,
-                         name = deparse(substitute(df)),
+                         name = NULL,
                          overwrite = FALSE,
                          temporary = TRUE,
                          ...) {
   stop_if_temporary(temporary)
 
+  if (is.null(name)) {
+    name <- substitute(df)
+    if (is_symbol(name)) {
+      name <- deparse(name)
+    } else {
+      name <- random_table_name()
+    }
+  }
+
   local({
-    db_con <- poolCheckout(dest)
-    on.exit(poolReturn(db_con))
+    db_con <- localCheckout(dest)
 
     dplyr::copy_to(
       dest = db_con,
@@ -60,6 +62,13 @@ copy_to.Pool <- function(dest,
 
   tbl.Pool(dest, name)
 }
+
+random_table_name <- function(prefix = "") {
+  vals <- c(letters, LETTERS, 0:9)
+  name <- paste0(sample(vals, 10, replace = TRUE), collapse = "")
+  paste0(prefix, "pool_", name)
+}
+
 
 # Lazily registered wrapped functions ------------------------------------------
 
@@ -76,10 +85,13 @@ dbplyr_register_methods <- function() {
     dbplyr_s3_register("db_collect")
     dbplyr_s3_register("db_compute")
     dbplyr_s3_register("db_connection_describe")
+    dbplyr_s3_register("db_copy_to")
+    dbplyr_s3_register("db_col_types")
     dbplyr_s3_register("db_sql_render")
     dbplyr_s3_register("sql_translation")
     dbplyr_s3_register("sql_join_suffix")
     dbplyr_s3_register("sql_query_explain")
+    dbplyr_s3_register("sql_query_fields")
   })
 }
 
@@ -102,8 +114,7 @@ dbplyr_wrap <- function(fun_name) {
   body <- expr({
     !!!temporary
 
-    db_con <- poolCheckout(con)
-    on.exit(poolReturn(db_con))
+    db_con <- localCheckout(con)
 
     !!recall
   })

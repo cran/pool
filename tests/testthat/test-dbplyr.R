@@ -13,6 +13,14 @@ test_that("can copy and collect", {
 
   # But copy_to must not be temporary
   expect_snapshot(dplyr::copy_to(pool, df), error = TRUE)
+
+  db2 <- dplyr::auto_copy(
+    db,
+    tibble::tibble(x = 11),
+    copy = TRUE,
+    temporary = FALSE
+  )
+  expect_s3_class(dbplyr::remote_con(db2), "Pool")
 })
 
 test_that("can use one-table verbs", {
@@ -56,6 +64,7 @@ test_that("can explain", {
   db <- dplyr::copy_to(pool, data.frame(x = 1), temporary = FALSE)
   expect_output(dplyr::explain(db))
 })
+
 test_that("can use schemas with pool", {
   pool <- local_db_pool()
 
