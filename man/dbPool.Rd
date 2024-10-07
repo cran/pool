@@ -47,30 +47,28 @@ options, but these don't work for all databases.}
 \code{dbPool()} is a drop-in replacement for \code{\link[DBI:dbConnect]{DBI::dbConnect()}} that
 provides a shared pool of connections that can automatically reconnect
 to the database if needed.
+See \link{DBI-wrap} for methods to use with pool objects,
+and \link{DBI-custom} for unsupported methods and the "pool" way of using them.
+}
+\details{
+A new connection is created transparently
+\itemize{
+\item if the pool is empty
+\item if the currently checked out connection is invalid
+(checked at most once every \code{validationInterval} seconds)
+\item if the pool is not full and the connections are all in use
+}
+
+Use \code{\link[=poolClose]{poolClose()}} to close the pool and all connections in it.
+See \code{\link[=poolCreate]{poolCreate()}} for details on the internal workings of the pool.
 }
 \examples{
 # You use a dbPool in the same way as a standard DBI connection
-pool <- dbPool(RSQLite::SQLite())
+pool <- dbPool(RSQLite::SQLite(), dbname = demoDb())
 pool
 
-DBI::dbWriteTable(pool, "mtcars", mtcars)
 dbGetQuery(pool, "SELECT * FROM mtcars LIMIT 4")
 
 # Always close a pool when you're done using it
 poolClose(pool)
-
-# Using the RMySQL package
-if (requireNamespace("RMySQL", quietly = TRUE)) {
-  pool <- dbPool(
-    drv = RMySQL::MySQL(),
-    dbname = "shinydemo",
-    host = "shiny-demo.csa7qlmguqrf.us-east-1.rds.amazonaws.com",
-    username = "guest",
-    password = "guest"
-  )
-
-  dbGetQuery(pool, "SELECT * from City LIMIT 5;")
-
-  poolClose(pool)
-}
 }

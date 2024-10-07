@@ -4,10 +4,10 @@ pool
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/rstudio/pool/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rstudio/pool/actions/workflows/R-CMD-check.yaml)
 [![R build status](https://github.com/rstudio/pool/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rstudio/pool/actions)
-[![Codecov test coverage](https://codecov.io/gh/rstudio/pool/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rstudio/pool?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/rstudio/pool/graph/badge.svg)](https://app.codecov.io/gh/rstudio/pool)
 <!-- badges: end -->
 
-The goal of the **pool** package is to abstract away the challenges of database connection management, which is particularly relevant in interactive contexts like Shiny apps that connect to a database. 
+The goal of the **pool** package is to abstract away the challenges of database connection management, which is particularly relevant in interactive contexts like Shiny apps that connect to a database.
 
 Instead of creating and closing connections yourself, you create a "pool" of connections, and the pool package manages them for you. You never have to create or close connections directly: The pool knows when it should grow, shrink or keep steady. You only need to close the pool when you’re done. The pool works seamlessly with DBI and dplyr, so in most cases using the pool package is as simple replacing `DBI::dbConnect()` with `dbPool()` and adding a call to `poolClose()`.
 
@@ -17,7 +17,7 @@ Learn more about why pool is needed in `vignette("why-pool")`.
 
 ## Usage
 
-Here’s a simple example of using a pool within a Shiny app (feel free to try it yourself):
+Here’s a simple example of using a pool within a Shiny app:
 
 ```r
 library(shiny)
@@ -25,33 +25,27 @@ library(dplyr)
 library(pool)
 loadNamespace("dbplyr")
 
-pool <- dbPool(
-  drv = RMySQL::MySQL(),
-  dbname = "shinydemo",
-  host = "shiny-demo.csa7qlmguqrf.us-east-1.rds.amazonaws.com",
-  username = "guest",
-  password = "guest"
-)
+pool <- dbPool(RSQLite::SQLite(), dbname = demoDb())
 onStop(function() {
   poolClose(pool)
 })
 
 ui <- fluidPage(
-  textInput("ID", "Enter your ID:", "5"),
+  textInput("cyl", "Enter your number of cylinders:", "4"),
   tableOutput("tbl"),
-  numericInput("nrows", "How many cities to show?", 10),
+  numericInput("nrows", "How many cars to show?", 10),
   plotOutput("popPlot")
 )
 
 server <- function(input, output, session) {
-  city <- tbl(pool, "City")
+  cars <- tbl(pool, "mtcars")
 
   output$tbl <- renderTable({
-    city |> filter(ID == !!input$ID) |> collect()
+    cars %>% filter(cyl == !!input$cyl) %>% collect()
   })
   output$popPlot <- renderPlot({
-    df <- city |> head(input$nrows) |> collect() 
-    pop <- df |> pull("Population", name = "Name")
+    df <- cars %>% head(input$nrows) %>% collect()
+    pop <- df %>% pull("mpg", name = "model")
     barplot(pop)
   })
 }
