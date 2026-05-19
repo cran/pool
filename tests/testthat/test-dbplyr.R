@@ -58,6 +58,17 @@ test_that("joins, semi_joins, and set ops work", {
   expect_no_error(dplyr::collect(dplyr::union(db1, db2)))
 })
 
+test_that("sql_dialect is cached on the Pool", {
+  skip_if_not(packageVersion("dbplyr") >= "2.5.2.9000")
+
+  pool <- local_db_pool()
+
+  expect_null(pool$dbplyrDialect)
+  d <- dbplyr::sql_dialect(pool)
+  expect_s3_class(d, "sql_dialect")
+  expect_identical(pool$dbplyrDialect, d)
+})
+
 test_that("can explain", {
   pool <- local_db_pool()
 
@@ -70,7 +81,9 @@ test_that("can use schemas with pool", {
 
   df <- tibble::tibble(x = 1:5)
 
-  dplyr::copy_to(pool, df,
+  dplyr::copy_to(
+    pool,
+    df,
     dbplyr::in_schema("main", "df"),
     temporary = FALSE,
     overwrite = TRUE
@@ -82,10 +95,10 @@ test_that("can use schemas with pool", {
 
 test_that("wrapper looks good", {
   # Skip in test coverage runs because covr instrumentation is injected
-   # into function body
-   skip_if_not(is.null(getOption("covr.flags")))
+  # into function body
+  skip_if_not(is.null(getOption("covr.flags")))
 
-   expect_snapshot({
+  expect_snapshot({
     dbplyr_wrap("db_collect")
     "with temporary argument"
     dbplyr_wrap("db_compute")

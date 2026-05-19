@@ -1,3 +1,7 @@
+# pool 1.0.5
+
+* Added compatibility for dbplyr's upcoming dialect-based dispatch.
+
 # pool 1.0.4
 
 * Switched from hosted MySQL database to local SQLite database in examples.

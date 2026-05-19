@@ -30,12 +30,14 @@ tbl.Pool <- function(src, from, ..., vars = NULL) {
 #' @param name Name for remote table. Defaults to the name of `df`, if it's
 #'   an identifier, otherwise uses a random name.
 #' @inheritParams dbplyr::copy_to.src_sql
-copy_to.Pool <- function(dest,
-                         df,
-                         name = NULL,
-                         overwrite = FALSE,
-                         temporary = TRUE,
-                         ...) {
+copy_to.Pool <- function(
+  dest,
+  df,
+  name = NULL,
+  overwrite = FALSE,
+  temporary = TRUE,
+  ...
+) {
   stop_if_temporary(temporary)
 
   if (is.null(name)) {
@@ -94,7 +96,20 @@ dbplyr_register_methods <- function() {
     dbplyr_s3_register("sql_join_suffix")
     dbplyr_s3_register("sql_query_explain")
     dbplyr_s3_register("sql_query_fields")
+    if (packageVersion("dbplyr") >= "2.5.2.9000") {
+      s3_register("dbplyr::sql_dialect", "Pool", sql_dialect_pool)
+    }
   })
+}
+
+sql_dialect_pool <- function(con) {
+  if (is.null(con$dbplyrDialect)) {
+    db_con <- localCheckout(con)
+
+    sql_dialect <- utils::getFromNamespace("sql_dialect", "dbplyr")
+    con$dbplyrDialect <- sql_dialect(db_con)
+  }
+  con$dbplyrDialect
 }
 
 check_dbplyr <- function() {
